@@ -1,5 +1,5 @@
 # machine-learning-demo
-This is a demonstration of Python's machine learning tools available in a Graphic User Interface. 
+This is a demonstration of Python's machine learning tools available in a Graphical User Interface. 
 
 # Overview
 This program is intended to demonstrate a simple form of machine learning. The user is able to utilize a GUI in order to load data from a file, visualize/summarize the data, compare various machine learning models, and finally select a model in order to train it to categorize data. 
