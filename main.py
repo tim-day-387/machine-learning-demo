@@ -69,20 +69,20 @@ def loadFile():
     global y_train                                                                   
     global y_validation                                                             
 
-    # Get data from CSV
-    try:
-        filePath = gui.filePath.get()
-        dataset = read_csv(filePath, names=names)
-    except:
-        print("Could not read filepath!")
-        return
-
     # Save the header input as a list into the names variable    
     try:
         names = eval(gui.header.get())
         labelName = names[-1]
     except:
         print("Could not read CSV headers!")
+        return
+    
+    # Get data from CSV
+    try:
+        filePath = gui.filePath.get()
+        dataset = read_csv(filePath, names=names)
+    except:
+        print("Could not read filepath!")
         return
 
     # Create Validation Dataset
