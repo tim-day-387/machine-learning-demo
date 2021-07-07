@@ -3,7 +3,7 @@
 # main.py
 # Timothy G. Day
 
-# ---------------------------------------------------- Load Libraries ----------------------------------------------------
+## Load Libraries ##
 
 # GUI libraries
 from tkinter import *
@@ -30,7 +30,7 @@ from sklearn.svm import SVC
 import sys
 import time
 
-# --------------------------------------------------- Global Variables ---------------------------------------------------
+## Variables ##
 
 # Variables
 dataset = None                                                                       # Stores the dataset from the .csv
@@ -50,200 +50,196 @@ fileLoaded = False                                                              
 modelsEval = False                                                                   # Have the models been evaluated?
 modelTrain = False                                                                   # Has the selected model been trained?
 
-# ----------------------------------------------------- Subroutines ------------------------------------------------------
-
 # Define what to perform on program exit
 def onExit():
     print("----- Quitting! -----")                                                   # Notify the user that the program is ending
-    root.update_idletasks()                                                          # Update root (to print message) 
-    root.update()                                                                    # Update root (to print message)
-    time.sleep(1)                                                                    # Wait 1 second (so user can see message
-    root.destroy()                                                                   # Destroy the GUI mainloop
+    root.update_idletasks()                                                          
+    root.update()                                                                    
+    time.sleep(1)                                                                    
+    root.destroy()                                                                   
     sys.exit("Terminated")                                                           # End the program execution
 
 # Load file and assign column headers
 def loadFile():
-    global dataset                                                                   # Declare global 
-    global labelName                                                                 # Declare global
-    global fileLoaded                                                                # Declare global
-    global X_train                                                                   # Declare global
-    global X_validation                                                              # Declare global
-    global y_train                                                                   # Declare global
-    global y_validation                                                              # Declare global
-    filePath = gui.filePath.get()                                                    # Save the textbox input into a local variable
-    names = eval(gui.header.get())                                                   # Save the header input as a list into the names variable
+    global dataset                                                                    
+    global labelName                                                                 
+    global fileLoaded                                                                
+    global X_train                                                                   
+    global X_validation                                                              
+    global y_train                                                                   
+    global y_validation                                                             
+    filePath = gui.filePath.get()                            # Save the textbox input into a local variable
+    names = eval(gui.header.get())                           # Save the header input as a list into the names variable
 
     # Read the CSV
-    dataset = read_csv(filePath, names=names)                                        # Read the .csv into the dataset variable
-    labelName = names[-1]                                                            # Grabs the last element of the names array (y)
+    dataset = read_csv(filePath, names=names)                # Read the .csv into the dataset variable
+    labelName = names[-1]                                    # Grabs the last element of the names array (y)
 
     # Create Validation Dataset
-    array = dataset.values                                                                                     # Put data values into array
-    X = array[:,0:-1]                                                                                          # Put numerical values into X
-    y = array[:,-1]                                                                                            # Put positive roots into y
-    X_train, X_validation, y_train, y_validation = train_test_split(X, y, test_size = 0.20, random_state = 1)  # Splits the data 80/20
+    array = dataset.values                                  
+    X = array[:,0:-1]                                       
+    y = array[:,-1]                                         
+    X_train, X_validation, y_train, y_validation = train_test_split(X, y, test_size = 0.20, random_state = 1)  
 
     # Success!
-    fileLoaded = True                                                                # The file is loaded succesfully
-    print("The file was loaded successfully!")                                       # Success message
+    fileLoaded = True                                                                
+    print("The file was loaded successfully!")                                       
 
 # Display the selected view
 def display():
-    global fileLoaded                                                                # Declare global
-    selection = gui.dispOpt.get()                                                    # Save the display option into a local variable
+    global fileLoaded                                                                
+    selection = gui.dispOpt.get()                                          # Save the display option into a local variable
 
-    if(fileLoaded == False):                                                         # Check if file is loaded
-        print("Please load a file first.")                                           # Not loaded!
-        return                                                                       # Return function
+    if(fileLoaded == False):                                               # Check if file is loaded
+        print("Please load a file first.")                                           
+        return                                                                       
     
     if(selection == "Data Shape"):
-        print("Data Shape")                                                          # Label 
-        print(dataset.shape)                                                         # Shape
-        print("\n")                                                                  # Newline
+        print("Data Shape")                                                          
+        print(dataset.shape)                                                         
+        print("\n")                                                                  
     if(selection == "Data Sample"):
-        print("Sample of Data")                                                      # Label
-        print(dataset.head(20))                                                      # Head
-        print("\n")                                                                  # Newline
+        print("Sample of Data")                                                      
+        print(dataset.head(20))                                                      
+        print("\n")                                                        
     if(selection == "Data Description"):
-        print("Description")                                                         # Label
-        print(dataset.describe())                                                    # Descriptions
-        print("\n")                                                                  # Newline
+        print("Description")                                               
+        print(dataset.describe())                                          
+        print("\n")                                                        
     if(selection == "Data Grouping"):
-        print("Data Grouping")                                                       # Label
-        print(dataset.groupby(labelName).size())                                     # Class Distribution
-        print("\n")                                                                  # Newline
+        print("Data Grouping")                                             
+        print(dataset.groupby(labelName).size())                           
+        print("\n")                                                        
 
 # Graph the selected view
 def graph():
-    global fileLoaded                                                                # Declare global
-    global dataset                                                                   # Declare global
+    global fileLoaded                                                      
+    global dataset                                                         
     selection = gui.graphOpt.get()                                                   # Save the graph option into a local variable
     
     if(fileLoaded == False):                                                         # Check if file is loaded
-        print("Please load a file first.")                                           # Not loaded!
-        return                                                                       # Return function
+        print("Please load a file first.")                                 
+        return                                                             
 
     if(selection == "Box/Whisker"):
         dataset.plot(kind = 'box', subplots = True, sharex = False, sharey = False)  # Create Box/Whisker plot
-        pyplot.show()                                                                # Display the plot
+        pyplot.show()                                                                
     if(selection == "Histograms"):
         dataset.hist()                                                               # Create the histograms 
-        pyplot.show()                                                                # Display the histograms
+        pyplot.show()                                                               
     if(selection == "Scatter Plot Matrix"):
         scatter_matrix(dataset)                                                      # Create a scatter matrix
-        pyplot.show()                                                                # Display the matrix
+        pyplot.show()                                                               
         
 # Complete the model evaluation 
 def modelEval():
-    global modelsEval                                                                # Declare global
-    global fileLoaded                                                                # Declare global
-    global models                                                                    # Declare global
-    global results                                                                   # Declare global            
-    global names                                                                     # Declare global
-    global X_train                                                                   # Declare global
-    global X_validation                                                              # Declare global
-    global y_train                                                                   # Declare global
-    global y_validation                                                              # Declare global
+    global modelsEval                                                               
+    global fileLoaded                                                               
+    global models                                                                   
+    global results                                                                  
+    global names                                                                    
+    global X_train                                                                  
+    global X_validation                                                             
+    global y_train                                                                  
+    global y_validation                                                             
     
     if(fileLoaded == False):                                                         # Check if file is loaded
-        print("Please load a file first.")                                           # Not loaded!
-        return                                                                       # Return function
+        print("Please load a file first.")                                           
+        return                                                                       
 
     # Select the  Different Models
-    models.append(('Log. Regression', LogisticRegression(solver = 'liblinear', multi_class = 'ovr')))          # Logistic Regression
-    models.append(('Lin. Disc. Analysis', LinearDiscriminantAnalysis()))                                       # Linear Discriminant Analysis
-    models.append(('K-Nearest Neighbors', KNeighborsClassifier()))                                             # K-Nearest Neighbors
-    models.append(('Class. Regress. Trees', DecisionTreeClassifier()))                                         # Classification and Regression Trees
-    models.append(('Gauss. Naive Bayes', GaussianNB()))                                                        # Gaussian Naive Bayes
+    models.append(('Log. Regression', LogisticRegression(solver = 'liblinear', multi_class = 'ovr'))) 
+    models.append(('Lin. Disc. Analysis', LinearDiscriminantAnalysis()))                              
+    models.append(('K-Nearest Neighbors', KNeighborsClassifier()))                                    
+    models.append(('Class. Regress. Trees', DecisionTreeClassifier()))                                
+    models.append(('Gauss. Naive Bayes', GaussianNB()))                                               
 
     # Evaluate the different models
     for name, model in models:
-        kfold = StratifiedKFold(n_splits = 10, random_state = 1, shuffle = True)                               # Define the type of k-fold (stratified 10-fold)
-        cv_results = cross_val_score(model, X_train, y_train, cv = kfold, scoring = 'accuracy')                # Get the cross validation results
-        results.append(cv_results)                                                                             # Append results
-        names.append(name[0:3])                                                                                # Append names
-        print('%s: %f (%f)' % (name, cv_results.mean(), cv_results.std()))                                     # Print names
+        kfold = StratifiedKFold(n_splits = 10, random_state = 1, shuffle = True)    
+        cv_results = cross_val_score(model, X_train, y_train, cv = kfold, scoring = 'accuracy') 
+        results.append(cv_results)                                                                             
+        names.append(name[0:3])                                                                                
+        print('%s: %f (%f)' % (name, cv_results.mean(), cv_results.std()))                                     
 
-    modelsEval = True                                                                                          # The models have been evaluated
+    modelsEval = True                                                                # The models have been evaluated
 
 # Train the selected model on the data
 def trainMod():
-    global modelTrain                                                                # Declare global
-    global fileLoaded                                                                # Declare global
-    global model                                                                     # Declare global
+    global modelTrain                                                                
+    global fileLoaded                                                                
+    global model                                                                     
     selection = gui.modelOpt.get()                                                   # Save the model option into a local variable
     
     if(fileLoaded == False):                                                         # Check if file is loaded
-        print("Please load a file first.")                                           # Not loaded!
-        return                                                                       # Return function
+        print("Please load a file first.")                                           
+        return                                                                       
 
     if(selection == "Log. Regression"):
-        model = LogisticRegression(solver = 'liblinear', multi_class = 'ovr')        # Select Log Regression 
+        model = LogisticRegression(solver = 'liblinear', multi_class = 'ovr')        
     if(selection == "Lin. Disc. Analysis"):
-        model = LinearDiscriminantAnalysis()                                         # Select Linear Discriminant Analysis 
+        model = LinearDiscriminantAnalysis()                                         
     if(selection == "K-Nearest Neighbors"):
-        model = KNeighborsClassifier()                                               # Select K Neighbors
+        model = KNeighborsClassifier()                                               
     if(selection == "Class. Regress. Trees"):
-        model = DecisionTreeClassifier()                                             # Select Decision Tree
+        model = DecisionTreeClassifier()                                             
     if(selection == "Gauss. Naive Bayes"):
-        model = GaussianNB()                                                         # Select Gaussian Naive Bayes
+        model = GaussianNB()                                                         
 
     model.fit(X_train, y_train)                                                      # Train the model on the given data
-    print("The training was successful!")                                            # Print success message
+    print("The training was successful!")                                            
 
     modelTrain = True                                                                # The model has been trained
 
 # Displays the plots for the model evaluation
 def evalPlots():
-    global modelsEval                                                                # Declare global
-    global results                                                                   # Declare global
-    global names                                                                     # Declare global
+    global modelsEval                                                                
+    global results                                                                   
+    global names                                                                     
 
     if(modelsEval == False):                                                         # Check if models have been evaluated
-        print("Please evaluate the models first.")                                   # Not evaluated!
-        return                                                                       # Return function
+        print("Please evaluate the models first.")                                   
+        return                                                                       
     
-    pyplot.boxplot(results, labels=names)                                            # Create the box plot
-    pyplot.title('Algorithm Comparison')                                             # Title the plot
-    pyplot.show()                                                                    # Show the plot
+    pyplot.boxplot(results, labels=names)                                            # Create a boxplot
+    pyplot.title('Algorithm Comparison')                                             
+    pyplot.show()                                                                    
 
 # Validates that the model is working correctly
 def modelValid():
-    global modelTrain                                                                # Declare global
-    global val_pred                                                                  # Declare global
-    global model                                                                     # Declare global                     
-    global y_validation                                                              # Declare global
-    global X_validation                                                              # Declare global
+    global modelTrain                                                                
+    global val_pred                                                                  
+    global model                                                                     
+    global y_validation                                                              
+    global X_validation                                                              
 
     if(modelTrain == False):                                                         # Check if a model has been trained
-        print("Please select a model and train it first.")                           # Model not selected!
-        return                                                                       # Return function 
+        print("Please select a model and train it first.")                           
+        return                                                                       
     
     val_pred = model.predict(X_validation)                                           # Make the predicts using the model
     
-    print("Accuracy Score")                                                          # Label
-    print(accuracy_score(y_validation, val_pred))                                    # Print accuracy score
-    print("\n")                                                                      # Newline
-    print("Confusion Matrix")                                                        # Label
-    print(confusion_matrix(y_validation, val_pred))                                  # Print confusion matrix
-    print("\n")                                                                      # Newline
-    print("Classification Report")                                                   # Label
-    print(classification_report(y_validation, val_pred, zero_division=0))            # Print classification report
-    print("\n")                                                                      # Newline
+    print("Accuracy Score")                                                          
+    print(accuracy_score(y_validation, val_pred))                                    
+    print("\n")                                                                      
+    print("Confusion Matrix")                                                        
+    print(confusion_matrix(y_validation, val_pred))                                  
+    print("\n")                                                                      
+    print("Classification Report")                                                   
+    print(classification_report(y_validation, val_pred, zero_division=0))            
+    print("\n")                                                                      
 
 # Make a prediction on a single peice of data
 def predSingle():
-    global modelTrain                                                                # Declare global
-    global model                                                                     # Declare global
+    global modelTrain                                                                
+    global model                                                                     
     data = [eval(gui.data.get())]                                                    # Save the data box as a local
 
     if(modelTrain == False):                                                         # Check if a model has been trained
-        print("Please select a model and train it first.")                           # Model not selected!
-        return                                                                       # Return function 
+        print("Please select a model and train it first.")                           
+        return                                                                       
 
     print("Prediction: " + str(model.predict(data)))                                 # Make the prediction
-    
-# ----------------------------------------------------- GUI Classes ------------------------------------------------------
 
 # Used to redirect stdout and stderr 
 class StdRedirector():                                                        
@@ -388,7 +384,7 @@ class GUI:
         self.data_label = Label(master, text = "Data:")                                          # Create a label for input box
         self.data_label.grid(row = 8, column = 3, sticky = E)                                    # Position that label
 
-# ---------------------------------------------------- GUI Mainloop ------------------------------------------------------
+## GUI Mainloop ##
 root = Tk()                                                                          # Make the root window
 gui = GUI(root)                                                                      # Intialize the root window
 root.mainloop()                                                                      # Start loop
