@@ -68,12 +68,22 @@ def loadFile():
     global X_validation                                                              
     global y_train                                                                   
     global y_validation                                                             
-    filePath = gui.filePath.get()                            # Save the textbox input into a local variable
-    names = eval(gui.header.get())                           # Save the header input as a list into the names variable
 
-    # Read the CSV
-    dataset = read_csv(filePath, names=names)                # Read the .csv into the dataset variable
-    labelName = names[-1]                                    # Grabs the last element of the names array (y)
+    # Get data from CSV
+    try:
+        filePath = gui.filePath.get()
+        dataset = read_csv(filePath, names=names)
+    except:
+        print("Could not read filepath!")
+        return
+
+    # Save the header input as a list into the names variable    
+    try:
+        names = eval(gui.header.get())
+        labelName = names[-1]
+    except:
+        print("Could not read CSV headers!")
+        return
 
     # Create Validation Dataset
     array = dataset.values                                  
@@ -233,12 +243,14 @@ def modelValid():
 def predSingle():
     global modelTrain                                                                
     global model                                                                     
-    data = [eval(gui.data.get())]                                                    # Save the data box as a local
 
     if(modelTrain == False):                                                         # Check if a model has been trained
         print("Please select a model and train it first.")                           
         return                                                                       
 
+    # Save the data box as a local
+    data = [eval(gui.data.get())]                                                   
+    
     print("Prediction: " + str(model.predict(data)))                                 # Make the prediction
 
 # Used to redirect stdout and stderr 
